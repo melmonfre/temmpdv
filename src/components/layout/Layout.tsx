@@ -3,7 +3,7 @@ import { Header } from "./Header";
 
 interface LayoutProps {
   children: React.ReactNode;
-  role: "admin" | "employee" | "customer";
+  role: "admin" | "employee" | "customer" | "supervisor";
 }
 
 export function Layout({ children, role }: LayoutProps) {

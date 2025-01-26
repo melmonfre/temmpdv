@@ -1,4 +1,4 @@
-import { User, Product, Sale } from '@/types';
+import { User, Product, Sale, SupervisorOperation } from '@/types';
 
 // Simulando delay da rede
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -74,6 +74,26 @@ const mockSales: Sale[] = [
     paymentMethod: 'CREDIT'
   },
   // Adicione mais vendas mock aqui
+];
+
+// Mock pending operations for supervisor
+const mockPendingOperations: SupervisorOperation[] = [
+  {
+    id: 1,
+    type: "Sangria",
+    registerId: 1,
+    amount: 500,
+    status: "PENDING",
+    timestamp: new Date().toISOString(),
+  },
+  {
+    id: 2,
+    type: "Retirada de Troco",
+    registerId: 2,
+    amount: 200,
+    status: "PENDING",
+    timestamp: new Date().toISOString(),
+  },
 ];
 
 export const api = {
@@ -167,5 +187,27 @@ export const api = {
     };
     mockSales.push(newSale);
     return newSale;
+  },
+
+  // Supervisor operations
+  async getPendingSupervisorOperations() {
+    await delay(500);
+    return mockPendingOperations;
+  },
+
+  async approveSupervisorOperation(operationId: number) {
+    await delay(500);
+    const operation = mockPendingOperations.find(op => op.id === operationId);
+    if (!operation) throw new Error('Operação não encontrada');
+    operation.status = "APPROVED";
+    return operation;
+  },
+
+  async rejectSupervisorOperation(operationId: number) {
+    await delay(500);
+    const operation = mockPendingOperations.find(op => op.id === operationId);
+    if (!operation) throw new Error('Operação não encontrada');
+    operation.status = "REJECTED";
+    return operation;
   }
 };

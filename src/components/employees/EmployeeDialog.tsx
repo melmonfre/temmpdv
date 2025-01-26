@@ -26,7 +26,9 @@ interface EmployeeDialogProps {
     name: string;
     email: string;
     role: string;
-    phone?: string; // Made optional to match User type
+    phone?: string;
+    userCode?: number;
+    password?: string;
   };
 }
 
@@ -35,22 +37,22 @@ export function EmployeeDialog({ open, onOpenChange, employee }: EmployeeDialogP
   const [formData, setFormData] = useState({
     name: employee?.name || "",
     email: employee?.email || "",
-    role: employee?.role || "EMPLOYEE",
+    role: employee?.role || "CASHIER",
     phone: employee?.phone || "",
+    userCode: employee?.userCode || "",
+    password: employee?.password || "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       if (employee) {
-        // Update existing employee
         await fetch(`/api/employees/${employee.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
         });
       } else {
-        // Create new employee
         await fetch("/api/employees", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -120,9 +122,34 @@ export function EmployeeDialog({ open, onOpenChange, employee }: EmployeeDialogP
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="ADMIN">Administrador</SelectItem>
-                <SelectItem value="EMPLOYEE">Funcionário</SelectItem>
+                <SelectItem value="SUPERVISOR">Supervisor</SelectItem>
+                <SelectItem value="CASHIER">Caixa</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="userCode">Código de Usuário</Label>
+            <Input
+              id="userCode"
+              type="number"
+              value={formData.userCode}
+              onChange={(e) =>
+                setFormData({ ...formData, userCode: e.target.value })
+              }
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Senha</Label>
+            <Input
+              id="password"
+              type="password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              required
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="phone">Telefone</Label>

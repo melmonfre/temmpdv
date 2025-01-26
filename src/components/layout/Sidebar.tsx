@@ -6,7 +6,7 @@ import { AdminMenu } from "./sidebar/AdminMenu";
 import { EmployeeMenu } from "./sidebar/EmployeeMenu";
 import { CustomerMenu } from "./sidebar/CustomerMenu";
 
-type UserRole = "admin" | "employee" | "customer";
+type UserRole = "admin" | "employee" | "customer" | "supervisor";
 
 interface SidebarProps {
   role: UserRole;
@@ -21,6 +21,7 @@ export function Sidebar({ role }: SidebarProps) {
     admin: AdminMenu,
     employee: EmployeeMenu,
     customer: CustomerMenu,
+    supervisor: AdminMenu, // Temporarily using AdminMenu for supervisor until a specific menu is created
   }[role];
 
   useEffect(() => {
