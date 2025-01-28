@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { AdminMenu } from "./sidebar/AdminMenu";
 import { EmployeeMenu } from "./sidebar/EmployeeMenu";
 import { CustomerMenu } from "./sidebar/CustomerMenu";
-
-type UserRole = "admin" | "employee" | "customer" | "supervisor";
+import { SupervisorMenu } from "./sidebar/SupervisorMenu";
+import { LayoutRole } from "@/types";
 
 interface SidebarProps {
-  role: UserRole;
+  role: LayoutRole;
 }
 
 export function Sidebar({ role }: SidebarProps) {
@@ -21,7 +21,8 @@ export function Sidebar({ role }: SidebarProps) {
     admin: AdminMenu,
     employee: EmployeeMenu,
     customer: CustomerMenu,
-    supervisor: AdminMenu, // Temporarily using AdminMenu for supervisor until a specific menu is created
+    supervisor: SupervisorMenu,
+    "self-service": CustomerMenu, // Using CustomerMenu for self-service
   }[role];
 
   useEffect(() => {

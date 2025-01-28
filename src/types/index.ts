@@ -2,13 +2,15 @@ export interface User {
   id: number;
   name: string;
   email: string;
-  role: 'ADMIN' | 'EMPLOYEE' | 'CUSTOMER' | 'SUPERVISOR' | 'CASHIER';
-  phone?: string;
+  role: UserRole;
+  phone: string;
+  document: string;
   address?: string;
-  document?: string;
-  userCode?: number;
-  password?: string;
 }
+
+export type UserRole = 'ADMIN' | 'SUPERVISOR' | 'CASHIER' | 'CUSTOMER' | 'EMPLOYEE';
+
+export type LayoutRole = "admin" | "employee" | "customer" | "supervisor" | "self-service";
 
 export interface Product {
   id: number;
@@ -17,26 +19,13 @@ export interface Product {
   price: number;
   stock: number;
   category: string;
-  imageUrl?: string;
-  barcode?: string;
-  cost?: number;
-  minStock?: number;
+  barcode: string;
+  cost: number;
+  minStock: number;
+  imageUrl: string;
 }
 
-export interface Sale {
-  id: number;
-  items: SaleItem[];
-  total: number;
-  customerId?: number;
-  customerName?: string;
-  employeeId: number;
-  employeeName: string;
-  date: string;
-  status: 'PENDING' | 'COMPLETED' | 'CANCELLED';
-  paymentMethod: 'CREDIT' | 'DEBIT' | 'CASH' | 'PIX';
-}
-
-export interface SaleItem {
+export interface CartItem {
   id: number;
   productId: number;
   productName: string;
@@ -45,24 +34,23 @@ export interface SaleItem {
   subtotal: number;
 }
 
-export interface CartItem extends SaleItem {
-  product: Product;
+export interface Sale {
+  id: number;
+  items: CartItem[];
+  total: number;
+  employeeId: number;
+  employeeName: string;
+  date: string;
+  status: 'COMPLETED' | 'CANCELLED';
+  paymentMethod: 'CREDIT' | 'DEBIT' | 'CASH' | 'PIX';
 }
 
 export interface SupervisorOperation {
   id: number;
-  type: "Sangria" | "Retirada de Troco" | "Troca" | "Cheque";
-  registerId: number;
-  amount: number;
-  status: "PENDING" | "APPROVED" | "REJECTED";
-  timestamp: string;
-}
-
-export interface RegisterOperation {
-  id: number;
   type: string;
   amount: number;
-  supervisorId?: number;
-  status: "PENDING" | "APPROVED" | "REJECTED";
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  requestedBy: number;
   timestamp: string;
+  registerId: number;
 }
