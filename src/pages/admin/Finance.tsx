@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/table";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/services/api";
+import { Sale } from "@/types";
 
 export default function Finance() {
-  const { data: sales } = useQuery({
+  const { data: sales } = useQuery<Sale[]>({
     queryKey: ["sales"],
     queryFn: api.getSales,
   });

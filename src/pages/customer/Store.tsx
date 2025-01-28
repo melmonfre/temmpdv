@@ -5,16 +5,25 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { ShoppingCart } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { Product } from "@/types";
 
 export default function Store() {
   const { toast } = useToast();
-  const { data: products, isLoading } = useQuery({
+  const [searchTerm, setSearchTerm] = useState("");
+  const { data: products, isLoading } = useQuery<Product[]>({
     queryKey: ['products'],
-    queryFn: api.getProducts
+    queryFn: () => api.getProducts(),
   });
 
+  const filteredProducts = products?.filter(product => 
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const addToCart = (productId: number) => {
-    // TODO: Implement cart functionality
     toast({
       title: "Produto adicionado ao carrinho",
       description: "O produto foi adicionado ao seu carrinho com sucesso!"
@@ -41,8 +50,27 @@ export default function Store() {
           </Button>
         </div>
 
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Buscar Produtos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <Label htmlFor="search">Buscar por nome ou descrição</Label>
+                <Input
+                  id="search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Digite para buscar..."
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products?.map((product) => (
+          {filteredProducts?.map((product) => (
             <Card key={product.id} className="flex flex-col">
               <CardHeader>
                 <CardTitle className="line-clamp-1">{product.name}</CardTitle>
@@ -66,6 +94,12 @@ export default function Store() {
             </Card>
           ))}
         </div>
+
+        {filteredProducts?.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Nenhum produto encontrado</p>
+          </div>
+        )}
       </div>
     </Layout>
   );

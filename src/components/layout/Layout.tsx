@@ -1,9 +1,10 @@
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
+import { LayoutRole } from "@/types";
 
 interface LayoutProps {
   children: React.ReactNode;
-  role: "admin" | "employee" | "customer" | "supervisor";
+  role: LayoutRole;
 }
 
 export function Layout({ children, role }: LayoutProps) {

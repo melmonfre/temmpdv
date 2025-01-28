@@ -23,7 +23,7 @@ export function PaymentDialog({
   onOpenChange,
   paymentMethod,
   onPaymentMethodChange,
-  total,
+  total = 0, // Provide default value to prevent undefined
   onConfirmPayment,
 }: PaymentDialogProps) {
   return (
