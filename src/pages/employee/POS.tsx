@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { ProductSearch } from "@/components/pos/ProductSearch";
 import { Cart } from "@/components/pos/Cart";
@@ -6,6 +6,7 @@ import { PaymentDialog } from "@/components/pos/PaymentDialog";
 import { CartItem, Product } from "@/types";
 import { Button } from "@/components/ui/button";
 import { api } from "@/services/api";
+import { useToast } from "@/hooks/use-toast";
 
 export default function POS() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -13,6 +14,28 @@ export default function POS() {
   const [paymentMethod, setPaymentMethod] = useState("dinheiro");
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setIsLoading(true);
+        const productsData = await api.getProducts();
+        setProducts(productsData);
+      } catch (error) {
+        toast({
+          title: "Erro",
+          description: "Não foi possível carregar os produtos",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
 
   // Filter products based on search term
   const filteredProducts = products.filter(product => 
@@ -44,9 +67,16 @@ export default function POS() {
       };
       setCartItems([...cartItems, newItem]);
     }
+
+    toast({
+      title: "Produto adicionado",
+      description: `${product.name} foi adicionado ao carrinho`,
+    });
   };
 
   const handleUpdateQuantity = (itemId: number, newQuantity: number) => {
+    if (newQuantity < 1) return;
+    
     setCartItems(
       cartItems.map((item) =>
         item.id === itemId
@@ -58,6 +88,10 @@ export default function POS() {
 
   const handleRemoveItem = (itemId: number) => {
     setCartItems(cartItems.filter((item) => item.id !== itemId));
+    toast({
+      title: "Produto removido",
+      description: "Item removido do carrinho",
+    });
   };
 
   const total = cartItems.reduce((sum, item) => sum + item.subtotal, 0);
@@ -65,12 +99,13 @@ export default function POS() {
   return (
     <Layout role="employee">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
+        <div className="space-y-4">
           <ProductSearch 
             searchTerm={searchTerm}
             onSearchChange={setSearchTerm}
             filteredProducts={filteredProducts}
             onProductSelect={handleAddToCart}
+            isLoading={isLoading}
           />
         </div>
         <div className="space-y-4">
@@ -100,6 +135,10 @@ export default function POS() {
         onConfirmPayment={() => {
           setCartItems([]);
           setIsPaymentOpen(false);
+          toast({
+            title: "Venda finalizada",
+            description: "Venda realizada com sucesso!",
+          });
         }}
       />
     </Layout>

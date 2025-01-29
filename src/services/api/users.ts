@@ -5,27 +5,43 @@ import { delay } from "./utils";
 const mockUsers: User[] = [
   {
     id: 1,
-    name: 'Admin',
-    email: 'admin@example.com',
+    name: 'João Silva',
+    email: 'joao@example.com',
     role: 'ADMIN',
     phone: '11999999999',
     document: '123.456.789-00'
   },
   {
     id: 2,
-    name: 'Supervisor',
-    email: 'supervisor@example.com',
+    name: 'Maria Santos',
+    email: 'maria@example.com',
     role: 'SUPERVISOR',
     phone: '11988888888',
     document: '987.654.321-00'
   },
   {
     id: 3,
-    name: 'Caixa',
-    email: 'caixa@example.com',
+    name: 'Pedro Oliveira',
+    email: 'pedro@example.com',
     role: 'CASHIER',
     phone: '11977777777',
     document: '456.789.123-00'
+  },
+  {
+    id: 4,
+    name: 'Ana Costa',
+    email: 'ana@example.com',
+    role: 'CASHIER',
+    phone: '11966666666',
+    document: '789.123.456-00'
+  },
+  {
+    id: 5,
+    name: 'Carlos Ferreira',
+    email: 'carlos@example.com',
+    role: 'CASHIER',
+    phone: '11955555555',
+    document: '321.654.987-00'
   }
 ];
 
