@@ -27,6 +27,42 @@ const mockProducts: Product[] = [
     cost: 8.0,
     minStock: 10
   },
+  {
+    id: 3,
+    name: 'Batata Frita',
+    description: 'Porção de batata frita crocante',
+    price: 12.0,
+    stock: 30,
+    category: 'Acompanhamentos',
+    imageUrl: '/placeholder.svg',
+    barcode: '7894900010017',
+    cost: 5.0,
+    minStock: 15
+  },
+  {
+    id: 4,
+    name: 'Água Mineral 500ml',
+    description: 'Água mineral sem gás',
+    price: 3.0,
+    stock: 200,
+    category: 'Bebidas',
+    imageUrl: '/placeholder.svg',
+    barcode: '7894900010018',
+    cost: 1.0,
+    minStock: 50
+  },
+  {
+    id: 5,
+    name: 'Sorvete',
+    description: 'Sorvete de chocolate com cobertura',
+    price: 8.0,
+    stock: 40,
+    category: 'Sobremesas',
+    imageUrl: '/placeholder.svg',
+    barcode: '7894900010019',
+    cost: 4.0,
+    minStock: 10
+  }
 ];
 
 export const productApi = {

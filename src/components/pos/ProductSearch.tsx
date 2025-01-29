@@ -9,13 +9,15 @@ interface ProductSearchProps {
   onSearchChange?: (value: string) => void;
   filteredProducts?: Product[];
   onProductSelect: (product: Product) => void;
+  isLoading?: boolean;
 }
 
 export function ProductSearch({ 
   searchTerm = "", 
   onSearchChange = () => {}, 
   filteredProducts = [], 
-  onProductSelect 
+  onProductSelect,
+  isLoading = false
 }: ProductSearchProps) {
   const { toast } = useToast();
 
@@ -29,10 +31,6 @@ export function ProductSearch({
       return;
     }
     onProductSelect(product);
-    toast({
-      title: "Produto adicionado",
-      description: "O produto foi adicionado ao carrinho"
-    });
   };
 
   return (
@@ -53,7 +51,9 @@ export function ProductSearch({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {filteredProducts.map((product) => (
+            {isLoading ? (
+              <p className="text-muted-foreground">Carregando produtos...</p>
+            ) : filteredProducts.map((product) => (
               <Card 
                 key={product.id}
                 className="cursor-pointer hover:bg-accent transition-colors" 
