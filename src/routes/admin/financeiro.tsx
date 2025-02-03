@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/services/api'
-
+import { Sale } from "@/types";
 
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -19,10 +19,10 @@ export const Route = createFileRoute('/admin/financeiro')({
 })
 
 export default function Finance() {
-  const { data: sales } = useQuery({
-    queryKey: ['sales'],
-    queryFn: api.getSales,
-  })
+   const { data: sales } = useQuery<Sale[]>({
+     queryKey: ["sales"],
+     queryFn: api.getSales,
+   });
 
   const totalRevenue = sales?.reduce((acc, sale) => acc + sale.total, 0) || 0
   const totalSales = sales?.length || 0
