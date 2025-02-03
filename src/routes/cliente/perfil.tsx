@@ -1,45 +1,51 @@
-import { useState } from "react";
-import { Layout } from "@/components/layout/Layout";
-import { Button } from "@/components/ui/button";
-import { MaskedInput } from "@/components/ui/masked-input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
+import { useState } from 'react'
+import { Layout } from '@/components/layout/Layout'
+import { Button } from '@/components/ui/button'
+import { MaskedInput } from '@/components/ui/masked-input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useToast } from '@/hooks/use-toast'
+
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/cliente/perfil')({
+  component: Profile,
+})
 
 export default function Profile() {
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
-    name: "João Silva",
-    email: "joao@example.com",
-    phone: "(11) 99999-9999",
-    cpf: "123.456.789-00",
-    cep: "12345-678",
-    address: "Rua Example, 123",
-  });
+    name: 'João Silva',
+    email: 'joao@example.com',
+    phone: '(11) 99999-9999',
+    cpf: '123.456.789-00',
+    cep: '12345-678',
+    address: 'Rua Example, 123',
+  })
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+    e.preventDefault()
+    setIsLoading(true)
 
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
       toast({
-        title: "Perfil atualizado",
-        description: "Seus dados foram atualizados com sucesso.",
-      });
+        title: 'Perfil atualizado',
+        description: 'Seus dados foram atualizados com sucesso.',
+      })
     } catch (error) {
       toast({
-        title: "Erro",
-        description: "Não foi possível atualizar seus dados.",
-        variant: "destructive",
-      });
+        title: 'Erro',
+        description: 'Não foi possível atualizar seus dados.',
+        variant: 'destructive',
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <Layout role="customer">
@@ -55,7 +61,9 @@ export default function Profile() {
                 <MaskedInput
                   id="name"
                   value={formData.name}
-                  onChange={(value) => setFormData({ ...formData, name: value })}
+                  onChange={(value) =>
+                    setFormData({ ...formData, name: value })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -64,7 +72,9 @@ export default function Profile() {
                   id="email"
                   type="email"
                   value={formData.email}
-                  onChange={(value) => setFormData({ ...formData, email: value })}
+                  onChange={(value) =>
+                    setFormData({ ...formData, email: value })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -73,7 +83,9 @@ export default function Profile() {
                   id="phone"
                   mask="phone"
                   value={formData.phone}
-                  onChange={(value) => setFormData({ ...formData, phone: value })}
+                  onChange={(value) =>
+                    setFormData({ ...formData, phone: value })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -99,16 +111,18 @@ export default function Profile() {
                 <MaskedInput
                   id="address"
                   value={formData.address}
-                  onChange={(value) => setFormData({ ...formData, address: value })}
+                  onChange={(value) =>
+                    setFormData({ ...formData, address: value })
+                  }
                 />
               </div>
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Salvando..." : "Salvar alterações"}
+                {isLoading ? 'Salvando...' : 'Salvar alterações'}
               </Button>
             </form>
           </CardContent>
         </Card>
       </div>
     </Layout>
-  );
+  )
 }

@@ -1,9 +1,15 @@
-import { useState } from "react";
-import { Layout } from "@/components/layout/Layout";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProfileSettings } from "@/components/settings/ProfileSettings";
-import { AppearanceSettings } from "@/components/settings/AppearanceSettings";
-import { SystemSettings } from "@/components/settings/SystemSettings";
+import { useState } from 'react'
+import { Layout } from '@/components/layout/Layout'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ProfileSettings } from '@/components/settings/ProfileSettings'
+import { AppearanceSettings } from '@/components/settings/AppearanceSettings'
+import { SystemSettings } from '@/components/settings/SystemSettings'
+
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/admin/configuracoes')({
+  component: Settings,
+})
 
 export default function Settings() {
   return (
@@ -28,5 +34,5 @@ export default function Settings() {
         </Tabs>
       </div>
     </Layout>
-  );
+  )
 }

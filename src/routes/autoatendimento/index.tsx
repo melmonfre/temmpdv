@@ -1,14 +1,19 @@
 import { Layout } from "@/components/layout/Layout";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/services/api";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
-import { ShoppingCart } from "lucide-react";
+import { Product } from "@/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Product } from "@/types";
+import { useToast } from "@/components/ui/use-toast";
+
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/autoatendimento/')({
+  component: Store,
+})
 
 export default function Store() {
   const { toast } = useToast();
@@ -23,16 +28,16 @@ export default function Store() {
     product.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const addToCart = (productId: number) => {
+  const handleProductSelect = (product: Product) => {
     toast({
-      title: "Produto adicionado ao carrinho",
-      description: "O produto foi adicionado ao seu carrinho com sucesso!"
+      title: "Produto selecionado",
+      description: `${product.name} foi adicionado ao seu pedido.`
     });
   };
 
   if (isLoading) {
     return (
-      <Layout role="customer">
+      <Layout role="self-service">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
@@ -41,14 +46,9 @@ export default function Store() {
   }
 
   return (
-    <Layout role="customer">
+    <Layout role="self-service">
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Loja Online</h1>
-          <Button variant="outline" size="icon">
-            <ShoppingCart className="h-5 w-5" />
-          </Button>
-        </div>
+        <h1 className="text-3xl font-bold">Autoatendimento</h1>
 
         <Card className="mb-6">
           <CardHeader>
@@ -71,26 +71,25 @@ export default function Store() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProducts?.map((product) => (
-            <Card key={product.id} className="flex flex-col">
-              <CardHeader>
-                <CardTitle className="line-clamp-1">{product.name}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex-1">
-                <p className="text-sm text-muted-foreground line-clamp-2">
+            <Card 
+              key={product.id} 
+              className="cursor-pointer hover:bg-accent transition-colors"
+              onClick={() => handleProductSelect(product)}
+            >
+              <CardContent className="p-4">
+                <h3 className="font-medium line-clamp-1">{product.name}</h3>
+                <p className="text-sm text-muted-foreground line-clamp-2 mt-2">
                   {product.description}
                 </p>
-                <p className="mt-4 text-2xl font-bold">
-                  R$ {product.price.toFixed(2)}
-                </p>
+                <div className="mt-4 flex justify-between items-center">
+                  <p className="text-xl font-bold">
+                    R$ {product.price.toFixed(2)}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Estoque: {product.stock}
+                  </p>
+                </div>
               </CardContent>
-              <CardFooter>
-                <Button 
-                  className="w-full" 
-                  onClick={() => addToCart(product.id)}
-                >
-                  Adicionar ao Carrinho
-                </Button>
-              </CardFooter>
             </Card>
           ))}
         </div>

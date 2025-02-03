@@ -1,58 +1,71 @@
-import { useState } from "react";
-import { Layout } from "@/components/layout/Layout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { Plus, Edit, Trash } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/services/api";
-import { ProductDialog } from "@/components/products/ProductDialog";
-import { Product } from "@/types";
+import { useState } from 'react'
+import { Layout } from '@/components/layout/Layout'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useToast } from '@/hooks/use-toast'
+import { Plus, Edit, Trash } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/services/api'
+import { ProductDialog } from '@/components/products/ProductDialog'
+import { Product } from '@/types'
+
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/admin/produtos')({
+  component: Products,
+})
 
 export default function Products() {
-  const { toast } = useToast();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
-  
-  const { data: products, isLoading, refetch } = useQuery({
-    queryKey: ['products'],
-    queryFn: api.getProducts
-  });
+  const { toast } = useToast()
+  const [searchTerm, setSearchTerm] = useState('')
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(
+    undefined,
+  )
 
-  const filteredProducts = products?.filter(product => 
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const {
+    data: products,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['products'],
+    queryFn: api.getProducts,
+  })
+
+  const filteredProducts = products?.filter(
+    (product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
 
   const handleDelete = async (productId: number) => {
     try {
-      await api.deleteProduct(productId);
+      await api.deleteProduct(productId)
       toast({
-        title: "Produto excluído",
-        description: "O produto foi excluído com sucesso."
-      });
-      refetch();
+        title: 'Produto excluído',
+        description: 'O produto foi excluído com sucesso.',
+      })
+      refetch()
     } catch (error) {
       toast({
-        title: "Erro",
-        description: "Não foi possível excluir o produto.",
-        variant: "destructive"
-      });
+        title: 'Erro',
+        description: 'Não foi possível excluir o produto.',
+        variant: 'destructive',
+      })
     }
-  };
+  }
 
   const handleEdit = (product: Product) => {
-    setSelectedProduct(product);
-    setDialogOpen(true);
-  };
+    setSelectedProduct(product)
+    setDialogOpen(true)
+  }
 
   const handleNewProduct = () => {
-    setSelectedProduct(undefined);
-    setDialogOpen(true);
-  };
+    setSelectedProduct(undefined)
+    setDialogOpen(true)
+  }
 
   if (isLoading) {
     return (
@@ -61,7 +74,7 @@ export default function Products() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
       </Layout>
-    );
+    )
   }
 
   return (
@@ -146,5 +159,5 @@ export default function Products() {
         />
       </div>
     </Layout>
-  );
+  )
 }

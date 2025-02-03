@@ -1,4 +1,10 @@
-import { Layout } from "@/components/layout/Layout";
+import { Layout } from '@/components/layout/Layout'
+
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/funcionario/vendas')({
+  component: EmployeeSales,
+})
 
 export default function EmployeeSales() {
   return (
@@ -8,5 +14,5 @@ export default function EmployeeSales() {
         {/* Sales content will be implemented later */}
       </div>
     </Layout>
-  );
+  )
 }

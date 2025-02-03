@@ -1,8 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Button } from '@/components/ui/button'
+import { Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { ArrowRight, BarChart3, DollarSign, ShoppingCart, Users } from "lucide-react";
 
-export default function Index() {
+export const Route = createFileRoute('/')({
+  component: HomeComponent,
+})
+
+function HomeComponent() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -11,10 +16,10 @@ export default function Index() {
           <h1 className="text-2xl font-bold text-primary">TEMM PDV</h1>
           <div className="space-x-4">
             <Button variant="ghost" asChild>
-              <Link to="/login">Entrar</Link>
+              <Link to="/Login">Entrar</Link>
             </Button>
             <Button asChild>
-              <Link to="/cadastro">Começar agora</Link>
+              <Link to="/Cadastro">Começar agora</Link>
             </Button>
           </div>
         </div>
@@ -119,7 +124,7 @@ export default function Index() {
               Comece agora mesmo e veja a diferença em sua gestão.
             </p>
             <Button size="lg" variant="secondary" asChild>
-              <Link to="/cadastro" className="flex items-center">
+              <Link to="/Cadastro" className="flex items-center">
                 Criar conta grátis <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -138,5 +143,5 @@ export default function Index() {
         </div>
       </footer>
     </div>
-  );
+  )
 }

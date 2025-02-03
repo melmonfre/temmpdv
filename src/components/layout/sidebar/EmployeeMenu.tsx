@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
@@ -13,7 +13,7 @@ const menuItems = [
 ];
 
 export function EmployeeMenu() {
-  const location = useLocation();
+
 
   return (
     <nav className="space-y-2">

@@ -1,41 +1,53 @@
-import { Layout } from "@/components/layout/Layout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Minus, Plus, Trash2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Layout } from '@/components/layout/Layout'
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Minus, Plus, Trash2 } from 'lucide-react'
+import { useNavigate } from '@tanstack/react-router'
+
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/cliente/carrinho')({
+  component: Cart,
+})
 
 // Mock do carrinho - será substituído pela integração real
 const cartItems = [
   {
     id: 1,
     productId: 1,
-    productName: "Coca-Cola 350ml",
+    productName: 'Coca-Cola 350ml',
     quantity: 2,
     price: 5.0,
     subtotal: 10.0,
     product: {
       id: 1,
-      name: "Coca-Cola 350ml",
-      description: "Refrigerante Coca-Cola Lata 350ml",
+      name: 'Coca-Cola 350ml',
+      description: 'Refrigerante Coca-Cola Lata 350ml',
       price: 5.0,
       stock: 100,
-      category: "Bebidas",
-    }
-  }
-];
+      category: 'Bebidas',
+    },
+  },
+]
 
 export default function Cart() {
-  const navigate = useNavigate();
-  const total = cartItems.reduce((acc, item) => acc + item.subtotal, 0);
+  const navigate = useNavigate()
+  const total = cartItems.reduce((acc, item) => acc + item.subtotal, 0)
 
   const updateQuantity = (itemId: number, newQuantity: number) => {
     // TODO: Implement quantity update
-  };
+  }
 
   const removeItem = (itemId: number) => {
     // TODO: Implement remove item
-  };
+  }
 
   return (
     <Layout role="customer">
@@ -45,10 +57,10 @@ export default function Cart() {
         {cartItems.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">Seu carrinho está vazio</p>
-            <Button 
-              className="mt-4" 
+            <Button
+              className="mt-4"
               variant="outline"
-              onClick={() => navigate("/cliente/loja")}
+              onClick={() => navigate('/cliente/loja')}
             >
               Continuar Comprando
             </Button>
@@ -59,7 +71,9 @@ export default function Cart() {
               {cartItems.map((item) => (
                 <Card key={item.id}>
                   <CardHeader>
-                    <CardTitle className="text-lg">{item.product.name}</CardTitle>
+                    <CardTitle className="text-lg">
+                      {item.product.name}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center justify-between">
@@ -67,7 +81,9 @@ export default function Cart() {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity - 1)
+                          }
                           disabled={item.quantity <= 1}
                         >
                           <Minus className="h-4 w-4" />
@@ -75,14 +91,18 @@ export default function Cart() {
                         <Input
                           type="number"
                           value={item.quantity}
-                          onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
+                          onChange={(e) =>
+                            updateQuantity(item.id, parseInt(e.target.value))
+                          }
                           className="w-20 text-center"
                           min="1"
                         />
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity + 1)
+                          }
                         >
                           <Plus className="h-4 w-4" />
                         </Button>
@@ -116,13 +136,11 @@ export default function Cart() {
               <CardFooter className="flex justify-between">
                 <Button
                   variant="outline"
-                  onClick={() => navigate("/cliente/loja")}
+                  onClick={() => navigate('/cliente/loja')}
                 >
                   Continuar Comprando
                 </Button>
-                <Button
-                  onClick={() => navigate("/cliente/checkout")}
-                >
+                <Button onClick={() => navigate('/cliente/checkout')}>
                   Finalizar Compra
                 </Button>
               </CardFooter>
@@ -131,5 +149,5 @@ export default function Cart() {
         )}
       </div>
     </Layout>
-  );
+  )
 }

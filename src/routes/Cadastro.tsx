@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { api } from "@/services/api";
 import { useToast } from "@/hooks/use-toast";
 
-const Register = () => {
+import { createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/Cadastro")({
+  component: Cadastro,
+});
+
+export default function Cadastro() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -18,7 +24,7 @@ const Register = () => {
         phone,
         address,
         document: "", // Add a default empty document for now
-        role: "CUSTOMER"
+        role: "CUSTOMER",
       });
       toast({
         title: "Registro bem-sucedido",
@@ -78,6 +84,4 @@ const Register = () => {
       <button type="submit">Registrar</button>
     </form>
   );
-};
-
-export default Register;
+}

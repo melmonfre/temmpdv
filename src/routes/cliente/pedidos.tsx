@@ -1,12 +1,18 @@
-import { Layout } from "@/components/layout/Layout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Layout } from '@/components/layout/Layout'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/cliente/pedidos')({
+  component: CustomerOrders,
+})
 
 export default function CustomerOrders() {
   return (
     <Layout role="customer">
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">Meus Pedidos</h1>
-        
+
         <div className="space-y-4">
           <Card>
             <CardHeader>
@@ -32,5 +38,5 @@ export default function CustomerOrders() {
         </div>
       </div>
     </Layout>
-  );
+  )
 }

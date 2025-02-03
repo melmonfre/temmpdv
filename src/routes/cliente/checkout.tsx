@@ -1,54 +1,73 @@
-import { Layout } from "@/components/layout/Layout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useState } from "react";
+import { Layout } from '@/components/layout/Layout'
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { useToast } from '@/hooks/use-toast'
+import { useNavigate } from '@tanstack/react-router'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { useState } from 'react'
+
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/cliente/checkout')({
+  component: Checkout,
+})
 
 export default function Checkout() {
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const [deliveryMethod, setDeliveryMethod] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const [showAddressDialog, setShowAddressDialog] = useState(false);
+  const navigate = useNavigate()
+  const { toast } = useToast()
+  const [deliveryMethod, setDeliveryMethod] = useState('')
+  const [paymentMethod, setPaymentMethod] = useState('')
+  const [showAddressDialog, setShowAddressDialog] = useState(false)
 
   const handleDeliveryMethodChange = (value: string) => {
-    setDeliveryMethod(value);
-    if (value === "delivery") {
-      setShowAddressDialog(true);
+    setDeliveryMethod(value)
+    if (value === 'delivery') {
+      setShowAddressDialog(true)
     }
-  };
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!deliveryMethod) {
       toast({
-        title: "Selecione o método de entrega",
-        description: "É necessário selecionar um método de entrega para continuar",
-        variant: "destructive"
-      });
-      return;
+        title: 'Selecione o método de entrega',
+        description:
+          'É necessário selecionar um método de entrega para continuar',
+        variant: 'destructive',
+      })
+      return
     }
     if (!paymentMethod) {
       toast({
-        title: "Selecione o método de pagamento",
-        description: "É necessário selecionar um método de pagamento para continuar",
-        variant: "destructive"
-      });
-      return;
+        title: 'Selecione o método de pagamento',
+        description:
+          'É necessário selecionar um método de pagamento para continuar',
+        variant: 'destructive',
+      })
+      return
     }
 
     // TODO: Implement payment gateway integration
     toast({
-      title: "Pedido realizado com sucesso!",
-      description: "Você receberá um e-mail com os detalhes do pedido."
-    });
-    navigate("/cliente");
-  };
+      title: 'Pedido realizado com sucesso!',
+      description: 'Você receberá um e-mail com os detalhes do pedido.',
+    })
+    navigate('/cliente')
+  }
 
   return (
     <Layout role="customer">
@@ -61,7 +80,10 @@ export default function Checkout() {
               <CardTitle>Método de Entrega</CardTitle>
             </CardHeader>
             <CardContent>
-              <RadioGroup value={deliveryMethod} onValueChange={handleDeliveryMethodChange}>
+              <RadioGroup
+                value={deliveryMethod}
+                onValueChange={handleDeliveryMethodChange}
+              >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="pickup" id="pickup" />
                   <Label htmlFor="pickup">Retirada no Local</Label>
@@ -79,7 +101,10 @@ export default function Checkout() {
               <CardTitle>Forma de Pagamento</CardTitle>
             </CardHeader>
             <CardContent>
-              <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
+              <RadioGroup
+                value={paymentMethod}
+                onValueChange={setPaymentMethod}
+              >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="credito" id="credito" />
                   <Label htmlFor="credito">Cartão de Crédito</Label>
@@ -107,13 +132,11 @@ export default function Checkout() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => navigate("/cliente/carrinho")}
+                onClick={() => navigate('/cliente/carrinho')}
               >
                 Voltar ao Carrinho
               </Button>
-              <Button type="submit">
-                Finalizar Pedido
-              </Button>
+              <Button type="submit">Finalizar Pedido</Button>
             </CardFooter>
           </Card>
         </form>
@@ -162,5 +185,5 @@ export default function Checkout() {
         </Dialog>
       </div>
     </Layout>
-  );
+  )
 }

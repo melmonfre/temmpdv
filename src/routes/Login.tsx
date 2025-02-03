@@ -1,60 +1,66 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useState } from 'react'
+import { useNavigate } from "@tanstack/react-router";
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
-import { authService } from "@/services/auth";
-import { Lock, Mail } from "lucide-react";
+} from '@/components/ui/card'
+import { useToast } from '@/hooks/use-toast'
+import { authService } from '@/services/auth'
+import { Lock, Mail } from 'lucide-react'
+
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute("/Login")({
+  component: Login,
+});
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
+  const { toast } = useToast()
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
+    e.preventDefault()
+    setIsLoading(true)
+
     try {
-      const response = await authService.login({ email, password });
-      
+      const response = await authService.login({ email, password })
+
       // Redirecionar baseado no papel do usuário
       switch (response.user.role) {
         case 'ADMIN':
-          navigate("/admin");
-          break;
+          navigate('/admin')
+          break
         case 'EMPLOYEE':
-          navigate("/funcionario");
-          break;
+          navigate('/funcionario')
+          break
         case 'CUSTOMER':
-          navigate("/cliente");
-          break;
+          navigate('/cliente')
+          break
       }
-      
+
       toast({
-        title: "Login realizado com sucesso!",
+        title: 'Login realizado com sucesso!',
         description: `Bem-vindo, ${response.user.name}!`,
-      });
+      })
     } catch (error) {
       toast({
-        variant: "destructive",
-        title: "Erro ao fazer login",
-        description: "Verifique suas credenciais e tente novamente.",
-      });
+        variant: 'destructive',
+        title: 'Erro ao fazer login',
+        description: 'Verifique suas credenciais e tente novamente.',
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -99,11 +105,11 @@ export default function Login() {
               </div>
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Entrando..." : "Entrar"}
+              {isLoading ? 'Entrando...' : 'Entrar'}
             </Button>
           </form>
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
