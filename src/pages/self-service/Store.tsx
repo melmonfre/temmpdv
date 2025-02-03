@@ -1,120 +1,99 @@
-import { useState } from "react";
+import { Layout } from "@/components/layout/Layout";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/services/api";
-import { CartItem, Product } from "@/types";
-import { ProductSearch } from "@/components/pos/ProductSearch";
-import { Cart } from "@/components/pos/Cart";
-import { PaymentDialog } from "@/components/pos/PaymentDialog";
+import { Product } from "@/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
-export default function SelfServiceStore() {
+export default function Store() {
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<string>("");
-  
-  const { data: products, isLoading } = useQuery({
+  const { data: products, isLoading } = useQuery<Product[]>({
     queryKey: ['products'],
-    queryFn: api.getProducts
+    queryFn: () => api.getProducts(),
   });
 
   const filteredProducts = products?.filter(product => 
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.barcode?.includes(searchTerm)
+    product.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const addToCart = (product: Product) => {
-    setCart(currentCart => {
-      const existingItem = currentCart.find(item => item.productId === product.id);
-      if (existingItem) {
-        return currentCart.map(item =>
-          item.productId === product.id
-            ? { ...item, quantity: item.quantity + 1, subtotal: (item.quantity + 1) * item.price }
-            : item
-        );
-      }
-      const newItem: CartItem = {
-        id: Date.now(),
-        productId: product.id,
-        productName: product.name,
-        quantity: 1,
-        price: product.price,
-        subtotal: product.price,
-        product: product
-      };
-      return [...currentCart, newItem];
+  const handleProductSelect = (product: Product) => {
+    toast({
+      title: "Produto selecionado",
+      description: `${product.name} foi adicionado ao seu pedido.`
     });
-  };
-
-  const updateQuantity = (productId: number, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    setCart(currentCart =>
-      currentCart.map(item =>
-        item.productId === productId
-          ? { ...item, quantity: newQuantity, subtotal: newQuantity * item.price }
-          : item
-      )
-    );
-  };
-
-  const removeFromCart = (productId: number) => {
-    setCart(currentCart => currentCart.filter(item => item.productId !== productId));
-  };
-
-  const total = cart.reduce((sum, item) => sum + item.subtotal, 0);
-
-  const handleFinishSale = () => {
-    setShowPaymentDialog(true);
-  };
-
-  const handlePayment = () => {
-    if (!paymentMethod) return;
-    
-    // TODO: Implement payment processing
-    setCart([]);
-    setShowPaymentDialog(false);
-    setPaymentMethod("");
   };
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
+      <Layout role="self-service">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="space-y-6">
-          <h1 className="text-3xl font-bold">Autoatendimento</h1>
-          <ProductSearch
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            filteredProducts={filteredProducts || []}
-            onProductSelect={addToCart}
-          />
+    <Layout role="self-service">
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold">Autoatendimento</h1>
+
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Buscar Produtos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <Label htmlFor="search">Buscar por nome ou descrição</Label>
+                <Input
+                  id="search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Digite para buscar..."
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProducts?.map((product) => (
+            <Card 
+              key={product.id} 
+              className="cursor-pointer hover:bg-accent transition-colors"
+              onClick={() => handleProductSelect(product)}
+            >
+              <CardContent className="p-4">
+                <h3 className="font-medium line-clamp-1">{product.name}</h3>
+                <p className="text-sm text-muted-foreground line-clamp-2 mt-2">
+                  {product.description}
+                </p>
+                <div className="mt-4 flex justify-between items-center">
+                  <p className="text-xl font-bold">
+                    R$ {product.price.toFixed(2)}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Estoque: {product.stock}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
-        <div className="space-y-6">
-          <Cart
-            items={cart}
-            onUpdateQuantity={updateQuantity}
-            onRemoveItem={removeFromCart}
-            total={total}
-            onFinishSale={handleFinishSale}
-          />
-        </div>
+        {filteredProducts?.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Nenhum produto encontrado</p>
+          </div>
+        )}
       </div>
-
-      <PaymentDialog
-        open={showPaymentDialog}
-        onOpenChange={setShowPaymentDialog}
-        paymentMethod={paymentMethod}
-        onPaymentMethodChange={setPaymentMethod}
-        total={total}
-        onConfirmPayment={handlePayment}
-      />
-    </div>
+    </Layout>
   );
 }

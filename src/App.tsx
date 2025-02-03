@@ -16,7 +16,13 @@ import EmployeeDashboard from "./pages/employee/Dashboard";
 import EmployeePOS from "./pages/employee/POS";
 import EmployeeSales from "./pages/employee/Sales";
 import EmployeeCashier from "./pages/employee/Cashier";
+import SupervisorDashboard from "./pages/supervisor/Dashboard";
+import SupervisorOperations from "./pages/supervisor/Operations";
+import SupervisorEmployees from "./pages/supervisor/Employees";
 import SelfServiceStore from "./pages/self-service/Store";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Index from "./pages/Index";
 import { Toaster } from "./components/ui/toaster";
 
 const queryClient = new QueryClient();
@@ -26,8 +32,10 @@ export function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          {/* Default route */}
-          <Route path="/" element={<Navigate to="/cliente" replace />} />
+          {/* Public routes */}
+          <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/cadastro" element={<Register />} />
 
           {/* Admin routes */}
           <Route path="/admin" element={<AdminDashboard />} />
@@ -36,6 +44,11 @@ export function App() {
           <Route path="/admin/vendas" element={<AdminSales />} />
           <Route path="/admin/financeiro" element={<AdminFinance />} />
           <Route path="/admin/configuracoes" element={<AdminSettings />} />
+
+          {/* Supervisor routes */}
+          <Route path="/supervisor" element={<SupervisorDashboard />} />
+          <Route path="/supervisor/operacoes" element={<SupervisorOperations />} />
+          <Route path="/supervisor/funcionarios" element={<SupervisorEmployees />} />
 
           {/* Employee routes */}
           <Route path="/funcionario" element={<EmployeeDashboard />} />

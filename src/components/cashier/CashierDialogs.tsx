@@ -10,6 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/services/api";
 
 interface CashierDialogProps {
   type: "Sangria" | "Retirada de Troco" | "Troca" | "Cheque";
@@ -19,11 +22,36 @@ interface CashierDialogProps {
 
 export function CashierDialog({ type, open, onOpenChange }: CashierDialogProps) {
   const [amount, setAmount] = useState("");
-  const [supervisorCode, setSupervisorCode] = useState("");
-  const [supervisorPassword, setSupervisorPassword] = useState("");
+  const [requestId, setRequestId] = useState<number | null>(null);
   const { toast } = useToast();
 
-  const handleConfirm = async () => {
+  const { data: authStatus } = useQuery({
+    queryKey: ['supervisor-auth', requestId],
+    queryFn: async () => requestId ? await api.checkAuthorizationStatus(requestId) : null,
+    enabled: !!requestId,
+    refetchInterval: 2000,
+  });
+
+  if (authStatus?.status === 'APPROVED') {
+    toast({
+      title: "Operação autorizada",
+      description: `${type} no valor de R$ ${Number(amount).toFixed(2)} foi autorizada.`,
+    });
+    setRequestId(null);
+    onOpenChange(false);
+  }
+
+  if (authStatus?.status === 'REJECTED') {
+    toast({
+      title: "Operação negada",
+      description: "O supervisor negou esta operação.",
+      variant: "destructive",
+    });
+    setRequestId(null);
+    onOpenChange(false);
+  }
+
+  const handleRequest = async () => {
     if (!amount || isNaN(Number(amount))) {
       toast({
         title: "Erro",
@@ -33,31 +61,23 @@ export function CashierDialog({ type, open, onOpenChange }: CashierDialogProps) 
       return;
     }
 
-    if (!supervisorCode || !supervisorPassword) {
-      toast({
-        title: "Erro",
-        description: "Por favor, insira as credenciais do supervisor.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
-      // Here you would typically validate supervisor credentials with API
-      // For now, we'll just show a success message
-      toast({
-        title: "Operação realizada",
-        description: `${type} no valor de R$ ${Number(amount).toFixed(2)} registrada com sucesso.`,
+      const request = await api.requestAuthorization({
+        type,
+        amount: Number(amount),
+        timestamp: new Date().toISOString(),
       });
-
-      setAmount("");
-      setSupervisorCode("");
-      setSupervisorPassword("");
-      onOpenChange(false);
+      
+      setRequestId(request.id);
+      
+      toast({
+        title: "Solicitação enviada",
+        description: "Aguardando autorização do supervisor...",
+      });
     } catch (error) {
       toast({
         title: "Erro",
-        description: "Credenciais do supervisor inválidas.",
+        description: "Não foi possível enviar a solicitação.",
         variant: "destructive",
       });
     }
@@ -79,32 +99,24 @@ export function CashierDialog({ type, open, onOpenChange }: CashierDialogProps) 
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0,00"
+              disabled={!!requestId}
             />
           </div>
-          <div className="space-y-2">
-            <Label>Código do Supervisor</Label>
-            <Input
-              type="number"
-              value={supervisorCode}
-              onChange={(e) => setSupervisorCode(e.target.value)}
-              placeholder="Digite o código do supervisor"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Senha do Supervisor</Label>
-            <Input
-              type="password"
-              value={supervisorPassword}
-              onChange={(e) => setSupervisorPassword(e.target.value)}
-              placeholder="Digite a senha do supervisor"
-            />
-          </div>
+          
+          {requestId && (
+            <div className="flex items-center justify-center space-x-2 py-4">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Aguardando autorização do supervisor...</span>
+            </div>
+          )}
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
-          <Button onClick={handleConfirm}>Confirmar</Button>
+          <Button onClick={handleRequest} disabled={!!requestId}>
+            Solicitar Autorização
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
