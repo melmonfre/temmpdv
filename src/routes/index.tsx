@@ -1,15 +1,20 @@
 import { Button } from '@/components/ui/button'
+import { useTheme } from '@/context/ThemeContext';
 import { Link } from '@tanstack/react-router'
 import { createFileRoute } from '@tanstack/react-router'
 import { ArrowRight, BarChart3, DollarSign, ShoppingCart, Users } from "lucide-react";
+
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
 })
 
+
+
 function HomeComponent() {
+   const { theme } = useTheme();
   return (
-    <div className="min-h-screen bg-white">
+    <div className={`min-h-screen bg-white ${theme}`}>
       {/* Header */}
       <header className="fixed top-0 w-full bg-white border-b z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -34,8 +39,9 @@ function HomeComponent() {
                 Sistema completo para gestão do seu negócio
               </h1>
               <p className="text-xl text-gray-600 mb-8">
-                Desenvolvemos uma ferramenta poderosa para gerenciamento de finanças com precisão 
-                e ajudar a manter a saúde financeira do seu negócio.
+                Desenvolvemos uma ferramenta poderosa para gerenciamento de
+                finanças com precisão e ajudar a manter a saúde financeira do
+                seu negócio.
               </p>
               <Button size="lg" className="mr-4" asChild>
                 <Link to="/cadastro" className="flex items-center">
@@ -62,21 +68,27 @@ function HomeComponent() {
               </div>
               <div className="p-6 rounded-xl border hover:shadow-lg transition-shadow">
                 <BarChart3 className="h-12 w-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Relatórios Detalhados</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Relatórios Detalhados
+                </h3>
                 <p className="text-gray-600">
                   Acompanhe o desempenho do seu negócio com relatórios completos
                 </p>
               </div>
               <div className="p-6 rounded-xl border hover:shadow-lg transition-shadow">
                 <DollarSign className="h-12 w-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Gestão Financeira</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Gestão Financeira
+                </h3>
                 <p className="text-gray-600">
                   Controle total sobre suas finanças e fluxo de caixa
                 </p>
               </div>
               <div className="p-6 rounded-xl border hover:shadow-lg transition-shadow">
                 <Users className="h-12 w-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-3">Controle de Acesso</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Controle de Acesso
+                </h3>
                 <p className="text-gray-600">
                   Gerencie permissões e acessos da sua equipe
                 </p>
@@ -89,7 +101,9 @@ function HomeComponent() {
         <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-12">Por que escolher o TEMM PDV?</h2>
+              <h2 className="text-3xl font-bold mb-12">
+                Por que escolher o TEMM PDV?
+              </h2>
               <div className="space-y-8">
                 <div className="p-6 bg-white rounded-xl shadow-sm">
                   <h3 className="text-xl font-semibold mb-2">Fácil de usar</h3>
@@ -98,13 +112,17 @@ function HomeComponent() {
                   </p>
                 </div>
                 <div className="p-6 bg-white rounded-xl shadow-sm">
-                  <h3 className="text-xl font-semibold mb-2">Suporte especializado</h3>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Suporte especializado
+                  </h3>
                   <p className="text-gray-600">
                     Equipe dedicada para ajudar você em todas as etapas
                   </p>
                 </div>
                 <div className="p-6 bg-white rounded-xl shadow-sm">
-                  <h3 className="text-xl font-semibold mb-2">Atualizações constantes</h3>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Atualizações constantes
+                  </h3>
                   <p className="text-gray-600">
                     Sistema sempre atualizado com as últimas tecnologias
                   </p>
@@ -143,5 +161,5 @@ function HomeComponent() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
