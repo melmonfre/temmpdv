@@ -1,4 +1,4 @@
-import { Layout } from "@/components/layout/Layout";
+import { Layout } from '@/components/layout/Layout'
 import {
   Table,
   TableBody,
@@ -6,17 +6,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/services/api";
+} from '@/components/ui/table'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/services/api'
+
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/supervisor/funcionarios')({
+  component: SupervisorEmployees,
+})
 
 export default function SupervisorEmployees() {
   const { data: employees, isLoading } = useQuery({
     queryKey: ['users'],
-    queryFn: api.getUsers
-  });
+    queryFn: api.getUsers,
+  })
 
-  const cashiers = employees?.filter(emp => emp.role === 'CASHIER') || [];
+  const cashiers = employees?.filter((emp) => emp.role === 'CASHIER') || []
 
   if (isLoading) {
     return (
@@ -25,7 +31,7 @@ export default function SupervisorEmployees() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
       </Layout>
-    );
+    )
   }
 
   return (
@@ -55,5 +61,5 @@ export default function SupervisorEmployees() {
         </Table>
       </div>
     </Layout>
-  );
+  )
 }

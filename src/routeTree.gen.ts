@@ -11,15 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LoginImport } from './routes/login'
+import { Route as CadastroImport } from './routes/cadastro'
 import { Route as AboutImport } from './routes/about'
-import { Route as LoginImport } from './routes/Login'
-import { Route as CadastroImport } from './routes/Cadastro'
 import { Route as IndexImport } from './routes/index'
 import { Route as SupervisorIndexImport } from './routes/supervisor/index'
 import { Route as FuncionarioIndexImport } from './routes/funcionario/index'
 import { Route as ClienteIndexImport } from './routes/cliente/index'
 import { Route as AutoatendimentoIndexImport } from './routes/autoatendimento/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
+import { Route as SupervisorOperacoesImport } from './routes/supervisor/operacoes'
+import { Route as SupervisorFuncionariosImport } from './routes/supervisor/funcionarios'
 import { Route as FuncionarioVendasImport } from './routes/funcionario/vendas'
 import { Route as FuncionarioPdvImport } from './routes/funcionario/pdv'
 import { Route as FuncionarioCaixaImport } from './routes/funcionario/caixa'
@@ -29,6 +31,7 @@ import { Route as ClientePedidosImport } from './routes/cliente/pedidos'
 import { Route as ClienteLojaImport } from './routes/cliente/loja'
 import { Route as ClienteCheckoutImport } from './routes/cliente/checkout'
 import { Route as ClienteCarrinhoImport } from './routes/cliente/carrinho'
+import { Route as ClienteCadastroImport } from './routes/cliente/cadastro'
 import { Route as AdminVendasImport } from './routes/admin/vendas'
 import { Route as AdminProdutosImport } from './routes/admin/produtos'
 import { Route as AdminFuncionariosImport } from './routes/admin/funcionarios'
@@ -37,21 +40,21 @@ import { Route as AdminConfiguracoesImport } from './routes/admin/configuracoes'
 
 // Create/Update Routes
 
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const LoginRoute = LoginImport.update({
-  id: '/Login',
-  path: '/Login',
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
 const CadastroRoute = CadastroImport.update({
-  id: '/Cadastro',
-  path: '/Cadastro',
+  id: '/cadastro',
+  path: '/cadastro',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AboutRoute = AboutImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,6 +91,18 @@ const AutoatendimentoIndexRoute = AutoatendimentoIndexImport.update({
 const AdminIndexRoute = AdminIndexImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SupervisorOperacoesRoute = SupervisorOperacoesImport.update({
+  id: '/supervisor/operacoes',
+  path: '/supervisor/operacoes',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SupervisorFuncionariosRoute = SupervisorFuncionariosImport.update({
+  id: '/supervisor/funcionarios',
+  path: '/supervisor/funcionarios',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -145,6 +160,12 @@ const ClienteCarrinhoRoute = ClienteCarrinhoImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ClienteCadastroRoute = ClienteCadastroImport.update({
+  id: '/cliente/cadastro',
+  path: '/cliente/cadastro',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AdminVendasRoute = AdminVendasImport.update({
   id: '/admin/vendas',
   path: '/admin/vendas',
@@ -186,25 +207,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/Cadastro': {
-      id: '/Cadastro'
-      path: '/Cadastro'
-      fullPath: '/Cadastro'
-      preLoaderRoute: typeof CadastroImport
-      parentRoute: typeof rootRoute
-    }
-    '/Login': {
-      id: '/Login'
-      path: '/Login'
-      fullPath: '/Login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
     '/about': {
       id: '/about'
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutImport
+      parentRoute: typeof rootRoute
+    }
+    '/cadastro': {
+      id: '/cadastro'
+      path: '/cadastro'
+      fullPath: '/cadastro'
+      preLoaderRoute: typeof CadastroImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
     '/admin/configuracoes': {
@@ -240,6 +261,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/vendas'
       fullPath: '/admin/vendas'
       preLoaderRoute: typeof AdminVendasImport
+      parentRoute: typeof rootRoute
+    }
+    '/cliente/cadastro': {
+      id: '/cliente/cadastro'
+      path: '/cliente/cadastro'
+      fullPath: '/cliente/cadastro'
+      preLoaderRoute: typeof ClienteCadastroImport
       parentRoute: typeof rootRoute
     }
     '/cliente/carrinho': {
@@ -305,6 +333,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FuncionarioVendasImport
       parentRoute: typeof rootRoute
     }
+    '/supervisor/funcionarios': {
+      id: '/supervisor/funcionarios'
+      path: '/supervisor/funcionarios'
+      fullPath: '/supervisor/funcionarios'
+      preLoaderRoute: typeof SupervisorFuncionariosImport
+      parentRoute: typeof rootRoute
+    }
+    '/supervisor/operacoes': {
+      id: '/supervisor/operacoes'
+      path: '/supervisor/operacoes'
+      fullPath: '/supervisor/operacoes'
+      preLoaderRoute: typeof SupervisorOperacoesImport
+      parentRoute: typeof rootRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/admin'
@@ -347,14 +389,15 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/Cadastro': typeof CadastroRoute
-  '/Login': typeof LoginRoute
   '/about': typeof AboutRoute
+  '/cadastro': typeof CadastroRoute
+  '/login': typeof LoginRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/financeiro': typeof AdminFinanceiroRoute
   '/admin/funcionarios': typeof AdminFuncionariosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/vendas': typeof AdminVendasRoute
+  '/cliente/cadastro': typeof ClienteCadastroRoute
   '/cliente/carrinho': typeof ClienteCarrinhoRoute
   '/cliente/checkout': typeof ClienteCheckoutRoute
   '/cliente/loja': typeof ClienteLojaRoute
@@ -364,6 +407,8 @@ export interface FileRoutesByFullPath {
   '/funcionario/caixa': typeof FuncionarioCaixaRoute
   '/funcionario/pdv': typeof FuncionarioPdvRoute
   '/funcionario/vendas': typeof FuncionarioVendasRoute
+  '/supervisor/funcionarios': typeof SupervisorFuncionariosRoute
+  '/supervisor/operacoes': typeof SupervisorOperacoesRoute
   '/admin': typeof AdminIndexRoute
   '/autoatendimento': typeof AutoatendimentoIndexRoute
   '/cliente': typeof ClienteIndexRoute
@@ -373,14 +418,15 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/Cadastro': typeof CadastroRoute
-  '/Login': typeof LoginRoute
   '/about': typeof AboutRoute
+  '/cadastro': typeof CadastroRoute
+  '/login': typeof LoginRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/financeiro': typeof AdminFinanceiroRoute
   '/admin/funcionarios': typeof AdminFuncionariosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/vendas': typeof AdminVendasRoute
+  '/cliente/cadastro': typeof ClienteCadastroRoute
   '/cliente/carrinho': typeof ClienteCarrinhoRoute
   '/cliente/checkout': typeof ClienteCheckoutRoute
   '/cliente/loja': typeof ClienteLojaRoute
@@ -390,6 +436,8 @@ export interface FileRoutesByTo {
   '/funcionario/caixa': typeof FuncionarioCaixaRoute
   '/funcionario/pdv': typeof FuncionarioPdvRoute
   '/funcionario/vendas': typeof FuncionarioVendasRoute
+  '/supervisor/funcionarios': typeof SupervisorFuncionariosRoute
+  '/supervisor/operacoes': typeof SupervisorOperacoesRoute
   '/admin': typeof AdminIndexRoute
   '/autoatendimento': typeof AutoatendimentoIndexRoute
   '/cliente': typeof ClienteIndexRoute
@@ -400,14 +448,15 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/Cadastro': typeof CadastroRoute
-  '/Login': typeof LoginRoute
   '/about': typeof AboutRoute
+  '/cadastro': typeof CadastroRoute
+  '/login': typeof LoginRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/financeiro': typeof AdminFinanceiroRoute
   '/admin/funcionarios': typeof AdminFuncionariosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/vendas': typeof AdminVendasRoute
+  '/cliente/cadastro': typeof ClienteCadastroRoute
   '/cliente/carrinho': typeof ClienteCarrinhoRoute
   '/cliente/checkout': typeof ClienteCheckoutRoute
   '/cliente/loja': typeof ClienteLojaRoute
@@ -417,6 +466,8 @@ export interface FileRoutesById {
   '/funcionario/caixa': typeof FuncionarioCaixaRoute
   '/funcionario/pdv': typeof FuncionarioPdvRoute
   '/funcionario/vendas': typeof FuncionarioVendasRoute
+  '/supervisor/funcionarios': typeof SupervisorFuncionariosRoute
+  '/supervisor/operacoes': typeof SupervisorOperacoesRoute
   '/admin/': typeof AdminIndexRoute
   '/autoatendimento/': typeof AutoatendimentoIndexRoute
   '/cliente/': typeof ClienteIndexRoute
@@ -428,14 +479,15 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/Cadastro'
-    | '/Login'
     | '/about'
+    | '/cadastro'
+    | '/login'
     | '/admin/configuracoes'
     | '/admin/financeiro'
     | '/admin/funcionarios'
     | '/admin/produtos'
     | '/admin/vendas'
+    | '/cliente/cadastro'
     | '/cliente/carrinho'
     | '/cliente/checkout'
     | '/cliente/loja'
@@ -445,6 +497,8 @@ export interface FileRouteTypes {
     | '/funcionario/caixa'
     | '/funcionario/pdv'
     | '/funcionario/vendas'
+    | '/supervisor/funcionarios'
+    | '/supervisor/operacoes'
     | '/admin'
     | '/autoatendimento'
     | '/cliente'
@@ -453,14 +507,15 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/Cadastro'
-    | '/Login'
     | '/about'
+    | '/cadastro'
+    | '/login'
     | '/admin/configuracoes'
     | '/admin/financeiro'
     | '/admin/funcionarios'
     | '/admin/produtos'
     | '/admin/vendas'
+    | '/cliente/cadastro'
     | '/cliente/carrinho'
     | '/cliente/checkout'
     | '/cliente/loja'
@@ -470,6 +525,8 @@ export interface FileRouteTypes {
     | '/funcionario/caixa'
     | '/funcionario/pdv'
     | '/funcionario/vendas'
+    | '/supervisor/funcionarios'
+    | '/supervisor/operacoes'
     | '/admin'
     | '/autoatendimento'
     | '/cliente'
@@ -478,14 +535,15 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/Cadastro'
-    | '/Login'
     | '/about'
+    | '/cadastro'
+    | '/login'
     | '/admin/configuracoes'
     | '/admin/financeiro'
     | '/admin/funcionarios'
     | '/admin/produtos'
     | '/admin/vendas'
+    | '/cliente/cadastro'
     | '/cliente/carrinho'
     | '/cliente/checkout'
     | '/cliente/loja'
@@ -495,6 +553,8 @@ export interface FileRouteTypes {
     | '/funcionario/caixa'
     | '/funcionario/pdv'
     | '/funcionario/vendas'
+    | '/supervisor/funcionarios'
+    | '/supervisor/operacoes'
     | '/admin/'
     | '/autoatendimento/'
     | '/cliente/'
@@ -505,14 +565,15 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   CadastroRoute: typeof CadastroRoute
   LoginRoute: typeof LoginRoute
-  AboutRoute: typeof AboutRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminFinanceiroRoute: typeof AdminFinanceiroRoute
   AdminFuncionariosRoute: typeof AdminFuncionariosRoute
   AdminProdutosRoute: typeof AdminProdutosRoute
   AdminVendasRoute: typeof AdminVendasRoute
+  ClienteCadastroRoute: typeof ClienteCadastroRoute
   ClienteCarrinhoRoute: typeof ClienteCarrinhoRoute
   ClienteCheckoutRoute: typeof ClienteCheckoutRoute
   ClienteLojaRoute: typeof ClienteLojaRoute
@@ -522,6 +583,8 @@ export interface RootRouteChildren {
   FuncionarioCaixaRoute: typeof FuncionarioCaixaRoute
   FuncionarioPdvRoute: typeof FuncionarioPdvRoute
   FuncionarioVendasRoute: typeof FuncionarioVendasRoute
+  SupervisorFuncionariosRoute: typeof SupervisorFuncionariosRoute
+  SupervisorOperacoesRoute: typeof SupervisorOperacoesRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AutoatendimentoIndexRoute: typeof AutoatendimentoIndexRoute
   ClienteIndexRoute: typeof ClienteIndexRoute
@@ -531,14 +594,15 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   CadastroRoute: CadastroRoute,
   LoginRoute: LoginRoute,
-  AboutRoute: AboutRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminFinanceiroRoute: AdminFinanceiroRoute,
   AdminFuncionariosRoute: AdminFuncionariosRoute,
   AdminProdutosRoute: AdminProdutosRoute,
   AdminVendasRoute: AdminVendasRoute,
+  ClienteCadastroRoute: ClienteCadastroRoute,
   ClienteCarrinhoRoute: ClienteCarrinhoRoute,
   ClienteCheckoutRoute: ClienteCheckoutRoute,
   ClienteLojaRoute: ClienteLojaRoute,
@@ -548,6 +612,8 @@ const rootRouteChildren: RootRouteChildren = {
   FuncionarioCaixaRoute: FuncionarioCaixaRoute,
   FuncionarioPdvRoute: FuncionarioPdvRoute,
   FuncionarioVendasRoute: FuncionarioVendasRoute,
+  SupervisorFuncionariosRoute: SupervisorFuncionariosRoute,
+  SupervisorOperacoesRoute: SupervisorOperacoesRoute,
   AdminIndexRoute: AdminIndexRoute,
   AutoatendimentoIndexRoute: AutoatendimentoIndexRoute,
   ClienteIndexRoute: ClienteIndexRoute,
@@ -566,14 +632,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/Cadastro",
-        "/Login",
         "/about",
+        "/cadastro",
+        "/login",
         "/admin/configuracoes",
         "/admin/financeiro",
         "/admin/funcionarios",
         "/admin/produtos",
         "/admin/vendas",
+        "/cliente/cadastro",
         "/cliente/carrinho",
         "/cliente/checkout",
         "/cliente/loja",
@@ -583,6 +650,8 @@ export const routeTree = rootRoute
         "/funcionario/caixa",
         "/funcionario/pdv",
         "/funcionario/vendas",
+        "/supervisor/funcionarios",
+        "/supervisor/operacoes",
         "/admin/",
         "/autoatendimento/",
         "/cliente/",
@@ -593,14 +662,14 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
-    "/Cadastro": {
-      "filePath": "Cadastro.tsx"
-    },
-    "/Login": {
-      "filePath": "Login.tsx"
-    },
     "/about": {
       "filePath": "about.tsx"
+    },
+    "/cadastro": {
+      "filePath": "cadastro.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
     },
     "/admin/configuracoes": {
       "filePath": "admin/configuracoes.tsx"
@@ -616,6 +685,9 @@ export const routeTree = rootRoute
     },
     "/admin/vendas": {
       "filePath": "admin/vendas.tsx"
+    },
+    "/cliente/cadastro": {
+      "filePath": "cliente/cadastro.tsx"
     },
     "/cliente/carrinho": {
       "filePath": "cliente/carrinho.tsx"
@@ -643,6 +715,12 @@ export const routeTree = rootRoute
     },
     "/funcionario/vendas": {
       "filePath": "funcionario/vendas.tsx"
+    },
+    "/supervisor/funcionarios": {
+      "filePath": "supervisor/funcionarios.tsx"
+    },
+    "/supervisor/operacoes": {
+      "filePath": "supervisor/operacoes.tsx"
     },
     "/admin/": {
       "filePath": "admin/index.tsx"

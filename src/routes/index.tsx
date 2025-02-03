@@ -16,10 +16,10 @@ function HomeComponent() {
           <h1 className="text-2xl font-bold text-primary">TEMM PDV</h1>
           <div className="space-x-4">
             <Button variant="ghost" asChild>
-              <Link to="/Login">Entrar</Link>
+              <Link to="/login">Entrar</Link>
             </Button>
             <Button asChild>
-              <Link to="/Cadastro">Começar agora</Link>
+              <Link to="/cadastro">Começar agora</Link>
             </Button>
           </div>
         </div>
@@ -124,7 +124,7 @@ function HomeComponent() {
               Comece agora mesmo e veja a diferença em sua gestão.
             </p>
             <Button size="lg" variant="secondary" asChild>
-              <Link to="/Cadastro" className="flex items-center">
+              <Link to="/cadastro" className="flex items-center">
                 Criar conta grátis <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>

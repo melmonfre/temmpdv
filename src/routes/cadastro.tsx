@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,12 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { Mail, User, Phone, Lock } from "lucide-react";
 
+import { createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/cadastro")({
+  component: Register,
+});
+
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -25,17 +31,17 @@ export default function Register() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       toast({
         title: "Conta criada com sucesso!",
         description: "Você já pode fazer login no sistema.",
       });
-      
-      navigate("/login");
+
+      navigate({ to: "/login", replace: true });
     } catch (error) {
       toast({
         variant: "destructive",

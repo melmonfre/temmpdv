@@ -1,4 +1,4 @@
-import { Layout } from "@/components/layout/Layout";
+import { Layout } from '@/components/layout/Layout'
 import {
   Table,
   TableBody,
@@ -6,13 +6,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/services/api";
-import { format } from "date-fns";
-import { useToast } from "@/hooks/use-toast";
-import { SupervisorOperation } from "@/types";
+} from '@/components/ui/table'
+import { Button } from '@/components/ui/button'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { api } from '@/services/api'
+import { format } from 'date-fns'
+import { useToast } from '@/hooks/use-toast'
+import { SupervisorOperation } from '@/types'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,46 +22,53 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { useState } from "react";
-import { Check, X } from "lucide-react";
+} from '@/components/ui/alert-dialog'
+import { useState } from 'react'
+import { Check, X } from 'lucide-react'
+
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/supervisor/operacoes')({
+  component: SupervisorOperations,
+})
 
 export default function SupervisorOperations() {
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const [selectedOperation, setSelectedOperation] = useState<SupervisorOperation | null>(null);
-  const [approveDialogOpen, setApproveDialogOpen] = useState(false);
-  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
+  const { toast } = useToast()
+  const queryClient = useQueryClient()
+  const [selectedOperation, setSelectedOperation] =
+    useState<SupervisorOperation | null>(null)
+  const [approveDialogOpen, setApproveDialogOpen] = useState(false)
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
 
   const { data: operations, isLoading } = useQuery({
     queryKey: ['supervisor-operations'],
     queryFn: () => api.getPendingAuthorizations(),
     refetchInterval: 5000,
-  });
+  })
 
   const approveMutation = useMutation({
     mutationFn: (id: number) => api.approveAuthorization(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['supervisor-operations'] });
+      queryClient.invalidateQueries({ queryKey: ['supervisor-operations'] })
       toast({
-        title: "Operação aprovada",
-        description: "A solicitação foi aprovada com sucesso.",
-      });
-      setApproveDialogOpen(false);
+        title: 'Operação aprovada',
+        description: 'A solicitação foi aprovada com sucesso.',
+      })
+      setApproveDialogOpen(false)
     },
-  });
+  })
 
   const rejectMutation = useMutation({
     mutationFn: (id: number) => api.rejectAuthorization(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['supervisor-operations'] });
+      queryClient.invalidateQueries({ queryKey: ['supervisor-operations'] })
       toast({
-        title: "Operação rejeitada",
-        description: "A solicitação foi rejeitada.",
-      });
-      setRejectDialogOpen(false);
+        title: 'Operação rejeitada',
+        description: 'A solicitação foi rejeitada.',
+      })
+      setRejectDialogOpen(false)
     },
-  });
+  })
 
   if (isLoading) {
     return (
@@ -70,7 +77,7 @@ export default function SupervisorOperations() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
       </Layout>
-    );
+    )
   }
 
   return (
@@ -93,27 +100,29 @@ export default function SupervisorOperations() {
               <TableRow key={operation.id}>
                 <TableCell>{operation.type}</TableCell>
                 <TableCell>R$ {operation.amount.toFixed(2)}</TableCell>
-                <TableCell>{format(new Date(operation.timestamp), 'dd/MM/yyyy HH:mm')}</TableCell>
+                <TableCell>
+                  {format(new Date(operation.timestamp), 'dd/MM/yyyy HH:mm')}
+                </TableCell>
                 <TableCell>{operation.status}</TableCell>
                 <TableCell className="space-x-2">
-                  <Button 
-                    size="sm" 
+                  <Button
+                    size="sm"
                     variant="default"
                     onClick={() => {
-                      setSelectedOperation(operation);
-                      setApproveDialogOpen(true);
+                      setSelectedOperation(operation)
+                      setApproveDialogOpen(true)
                     }}
                     disabled={operation.status !== 'PENDING'}
                   >
                     <Check className="mr-2 h-4 w-4" />
                     Aprovar
                   </Button>
-                  <Button 
-                    size="sm" 
+                  <Button
+                    size="sm"
                     variant="destructive"
                     onClick={() => {
-                      setSelectedOperation(operation);
-                      setRejectDialogOpen(true);
+                      setSelectedOperation(operation)
+                      setRejectDialogOpen(true)
                     }}
                     disabled={operation.status !== 'PENDING'}
                   >
@@ -126,12 +135,15 @@ export default function SupervisorOperations() {
           </TableBody>
         </Table>
 
-        <AlertDialog open={approveDialogOpen} onOpenChange={setApproveDialogOpen}>
+        <AlertDialog
+          open={approveDialogOpen}
+          onOpenChange={setApproveDialogOpen}
+        >
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Confirmar Aprovação</AlertDialogTitle>
               <AlertDialogDescription>
-                Tem certeza que deseja aprovar esta operação? 
+                Tem certeza que deseja aprovar esta operação?
                 {selectedOperation && (
                   <div className="mt-2">
                     <p>Tipo: {selectedOperation.type}</p>
@@ -143,7 +155,10 @@ export default function SupervisorOperations() {
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>
               <AlertDialogAction
-                onClick={() => selectedOperation && approveMutation.mutate(selectedOperation.id)}
+                onClick={() =>
+                  selectedOperation &&
+                  approveMutation.mutate(selectedOperation.id)
+                }
               >
                 Confirmar
               </AlertDialogAction>
@@ -168,7 +183,10 @@ export default function SupervisorOperations() {
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>
               <AlertDialogAction
-                onClick={() => selectedOperation && rejectMutation.mutate(selectedOperation.id)}
+                onClick={() =>
+                  selectedOperation &&
+                  rejectMutation.mutate(selectedOperation.id)
+                }
                 className="bg-destructive hover:bg-destructive/90"
               >
                 Rejeitar
@@ -178,5 +196,5 @@ export default function SupervisorOperations() {
         </AlertDialog>
       </div>
     </Layout>
-  );
+  )
 }
