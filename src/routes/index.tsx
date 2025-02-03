@@ -1,22 +1,26 @@
-import { Button } from '@/components/ui/button'
-import { useTheme } from '@/context/ThemeContext';
-import { Link } from '@tanstack/react-router'
-import { createFileRoute } from '@tanstack/react-router'
-import { ArrowRight, BarChart3, DollarSign, ShoppingCart, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "@/context/ThemeContext";
+import { Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import {
+  ArrowRight,
+  BarChart3,
+  DollarSign,
+  ShoppingCart,
+  Users,
+} from "lucide-react";
 
-
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute("/")({
   component: HomeComponent,
-})
-
-
+});
 
 function HomeComponent() {
-   const { theme } = useTheme();
+  const { theme } = useTheme();
+
   return (
-    <div className={`min-h-screen bg-white ${theme}`}>
+    <div className={`min-h-screen bg-background text-foreground ${theme}`}>
       {/* Header */}
-      <header className="fixed top-0 w-full bg-white border-b z-50">
+      <header className="fixed top-0 w-full bg-background border-b z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-primary">TEMM PDV</h1>
           <div className="space-x-4">
