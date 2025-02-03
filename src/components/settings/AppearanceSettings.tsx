@@ -1,18 +1,33 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/components/ui/use-toast";
 import { Switch } from "@/components/ui/switch";
+import { useState } from "react";
+import { useTheme } from "@/context/ThemeContext";
+
+type Theme = "light" | "dark" | "system";
+type PrimaryColor = "blue" | "purple" | "green" | "orange";
 
 export function AppearanceSettings() {
   const { toast } = useToast();
-  const [theme, setTheme] = useState("light");
-  const [primaryColor, setPrimaryColor] = useState("blue");
+  const {
+    theme: currentTheme,
+    primaryColor: currentPrimaryColor,
+    setTheme,
+    setPrimaryColor,
+  } = useTheme();
+  const [selectedTheme, setSelectedTheme] = useState<Theme>(currentTheme);
+  const [selectedPrimaryColor, setSelectedPrimaryColor] =
+    useState<PrimaryColor>(currentPrimaryColor);
   const [isCompact, setIsCompact] = useState(false);
 
   const handleSave = () => {
+    // Apply the selected theme and primary color globally
+    setTheme(selectedTheme);
+    setPrimaryColor(selectedPrimaryColor);
+
     toast({
       title: "Aparência atualizada",
       description: "As configurações de aparência foram salvas.",
@@ -26,8 +41,8 @@ export function AppearanceSettings() {
           <div>
             <Label>Tema</Label>
             <RadioGroup
-              defaultValue={theme}
-              onValueChange={setTheme}
+              value={selectedTheme}
+              onValueChange={(value: Theme) => setSelectedTheme(value)}
               className="grid grid-cols-3 gap-4 mt-2"
             >
               <Label
@@ -48,7 +63,11 @@ export function AppearanceSettings() {
                 htmlFor="system"
                 className="flex flex-col items-center justify-between rounded-md border-2 border-muted p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary"
               >
-                <RadioGroupItem value="system" id="system" className="sr-only" />
+                <RadioGroupItem
+                  value="system"
+                  id="system"
+                  className="sr-only"
+                />
                 <span>Sistema</span>
               </Label>
             </RadioGroup>
@@ -57,8 +76,10 @@ export function AppearanceSettings() {
           <div>
             <Label>Cor principal</Label>
             <RadioGroup
-              defaultValue={primaryColor}
-              onValueChange={setPrimaryColor}
+              value={selectedPrimaryColor}
+              onValueChange={(value: PrimaryColor) =>
+                setSelectedPrimaryColor(value)
+              }
               className="grid grid-cols-4 gap-4 mt-2"
             >
               <Label
@@ -71,7 +92,11 @@ export function AppearanceSettings() {
                 htmlFor="purple"
                 className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-purple-500 p-4 hover:bg-purple-600 [&:has([data-state=checked])]:border-primary"
               >
-                <RadioGroupItem value="purple" id="purple" className="sr-only" />
+                <RadioGroupItem
+                  value="purple"
+                  id="purple"
+                  className="sr-only"
+                />
               </Label>
               <Label
                 htmlFor="green"
@@ -83,7 +108,11 @@ export function AppearanceSettings() {
                 htmlFor="orange"
                 className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-orange-500 p-4 hover:bg-orange-600 [&:has([data-state=checked])]:border-primary"
               >
-                <RadioGroupItem value="orange" id="orange" className="sr-only" />
+                <RadioGroupItem
+                  value="orange"
+                  id="orange"
+                  className="sr-only"
+                />
               </Label>
             </RadioGroup>
           </div>
