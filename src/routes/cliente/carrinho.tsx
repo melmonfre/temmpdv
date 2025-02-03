@@ -60,7 +60,7 @@ export default function Cart() {
             <Button
               className="mt-4"
               variant="outline"
-              onClick={() => navigate('/cliente/loja')}
+              onClick={() => navigate({ to: "/cliente/loja"})}
             >
               Continuar Comprando
             </Button>
@@ -136,11 +136,11 @@ export default function Cart() {
               <CardFooter className="flex justify-between">
                 <Button
                   variant="outline"
-                  onClick={() => navigate('/cliente/loja')}
+                  onClick={() => navigate({ to: "/cliente/loja"})}
                 >
                   Continuar Comprando
                 </Button>
-                <Button onClick={() => navigate('/cliente/checkout')}>
+                <Button onClick={() => navigate({ to: "/cliente/checkout"})}>
                   Finalizar Compra
                 </Button>
               </CardFooter>

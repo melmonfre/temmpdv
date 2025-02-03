@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/services/api'
-import { Sale } from "@/types";
+
 
 import { createFileRoute } from '@tanstack/react-router'
 

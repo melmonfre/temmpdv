@@ -66,7 +66,7 @@ export default function Checkout() {
       title: 'Pedido realizado com sucesso!',
       description: 'Você receberá um e-mail com os detalhes do pedido.',
     })
-    navigate('/cliente')
+    navigate({ to: "/cliente" });
   }
 
   return (
@@ -132,7 +132,7 @@ export default function Checkout() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => navigate('/cliente/carrinho')}
+                onClick={() => navigate({ to: "/cliente/carrinho"})}
               >
                 Voltar ao Carrinho
               </Button>

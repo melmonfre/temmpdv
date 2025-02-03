@@ -37,13 +37,13 @@ export default function Login() {
       // Redirecionar baseado no papel do usuário
       switch (response.user.role) {
         case 'ADMIN':
-          navigate('/admin')
+          navigate({ to: "/admin"});
           break
         case 'EMPLOYEE':
-          navigate('/funcionario')
+          navigate({ to: "/funcionario" });
           break
         case 'CUSTOMER':
-          navigate('/cliente')
+          navigate({ to: "/cliente" });
           break
       }
 
